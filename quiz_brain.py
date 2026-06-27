@@ -14,3 +14,12 @@ class QuizBrain:
         self.question_number +=1
         return (f'Q.{self.question_number}: Is {self.current_question.capital}'
                 f' the capital of {self.current_question.country}?')
+
+    def check_answer(self, user_answer):
+        current_answer = self.current_question.answer
+
+        if current_answer.lower() == user_answer.lower():
+            self.score += 1
+            return True
+        else:
+            return False
