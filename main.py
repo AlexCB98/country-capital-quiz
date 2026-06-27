@@ -1,16 +1,34 @@
 from country_model import CountryQuestion
+from quiz_brain import QuizBrain
 from data import clean_country_data
+from random import choice
 
 question_bank = []
+
+true_false = (True, False)
 
 for item in clean_country_data:
     country = item['country']
     capital = item['capital']
-    answer = 'True'
 
-    question_model = CountryQuestion(country,capital,answer)
-    question_bank.append(question_model)
+    rnd_choice = choice(true_false)
 
-for question in question_bank[:3]:
-    print(question)
-    print('---')
+    if rnd_choice:
+        capital = item['capital']
+        answer = 'True'
+    else:
+        wrong_item = choice(clean_country_data)
+
+        while wrong_item['country'] == country:
+            wrong_item = choice(clean_country_data)
+
+        capital = wrong_item['capital']
+        answer = 'False'
+
+    new_question = CountryQuestion(country, capital, answer)
+    question_bank.append(new_question)
+
+quiz = QuizBrain(question_bank)
+
+while quiz.still_has_questions():
+    print(quiz.next_question())
