@@ -58,6 +58,7 @@ class QuizInterface:
             highlightthickness=0,
             padx=0,
             pady=0,
+            command=self.true_check,
         )
         self.true_button.grid(row=2, column=0)
 
@@ -71,7 +72,44 @@ class QuizInterface:
             highlightthickness=0,
             padx=0,
             pady=0,
+            command=self.false_check,
         )
         self.false_button.grid(row=2, column=1)
 
+        self.get_next_question()
+
         self.window.mainloop()
+
+    def get_next_question(self):
+        self.canvas.config(bg=CANVAS_COLOR)
+
+        if self.quiz.still_has_questions():
+            self.score_label.config(text=f"Score: {self.quiz.score}")
+            q_text = self.quiz.next_question()
+            self.canvas.itemconfig(self.question_text, text=q_text)
+        else:
+            self.canvas.itemconfig(
+                self.question_text,
+                text=f"You reached the end of the quiz.\n"
+                     f"Final score: {self.quiz.score}/{self.quiz.question_number}"
+            )
+            self.true_button.config(state="disabled")
+            self.false_button.config(state="disabled")
+
+    def true_check(self):
+        is_right = self.quiz.check_answer("True")
+        self.feedback(is_right)
+
+    def false_check(self):
+        is_right = self.quiz.check_answer("False")
+        self.feedback(is_right)
+
+    def feedback(self, is_right):
+        if is_right:
+            self.canvas.config(bg="green")
+        else:
+            self.canvas.config(bg="red")
+
+        self.window.after(1000, self.get_next_question)
+
+
