@@ -2,6 +2,7 @@ from country_model import CountryQuestion
 from quiz_brain import QuizBrain
 from data import clean_country_data
 from random import choice, shuffle
+from ui import QuizInterface
 
 question_bank = []
 
@@ -31,16 +32,4 @@ for item in clean_country_data:
     question_bank.append(new_question)
 
 quiz = QuizBrain(question_bank)
-
-while quiz.still_has_questions():
-
-    question_text = quiz.next_question()
-    user_answer = input(f'{question_text} -> True/False: ')
-    is_right = quiz.check_answer(user_answer)
-
-    if is_right:
-        print('Correct')
-    else:
-        print('Wrong')
-
-    print(f'Score: {quiz.score}/{quiz.question_number}')
+quiz_ui = QuizInterface(quiz)
